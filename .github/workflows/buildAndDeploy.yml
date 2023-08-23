@@ -1,44 +1,25 @@
-name: Build and Deploy
-
-on:
-  push:
-    branches:
-      - master   # Adjust to your main branch name
-
+name: Deploy website on push
+on: push
 jobs:
-  build-deploy:
+  web-deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     env:
       CI: false
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
+      - name: Get latest code
+        uses: actions/checkout@v3
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18   # Choose your desired Node.js version
-
+          node-version: 14.x
       - name: Install dependencies
-        run: npm install
-
+        run: npm ci
       - name: Build React app
         run: npm run build
-
-      - name: Deploy via FTP
-        run: |
-          docker run --rm \
-            -e GITFTP_USERNAME=$FTP_USERNAME \
-            -e GITFTP_PASSWORD=$FTP_PASSWORD \
-            -e GITFTP_URL=ftp://$FTP_SERVER/$REMOTE_DIR \
-            -v $(pwd)/build:/app \
-            ncarlier/gitftp
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          REMOTE_DIR: /htdocs 
-
-  # You can add more jobs or steps here as needed
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{secrets.FTP_SERVER}}
+          username: ${{secrets.FTP_USERNAME}}
+          password: ${{ secrets.FTP_PASSWORD }}
