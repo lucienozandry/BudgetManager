@@ -12,9 +12,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
-      - name: Install dependencies
-        run: npm ci
+          node-version: 18.x
       - name: Build React app
         run: npm run build
       - name: Sync files
