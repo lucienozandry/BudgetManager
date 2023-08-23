@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-        CI: false
+      CI: false
         
     steps:
     - name: Checkout code
