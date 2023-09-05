@@ -19,7 +19,7 @@ export default function App() {
     
     React.useEffect(() => {
         setLoading(true);
-        backend('/user/auth/state')
+        backend('/')
             .then(response => {
                     setLoading(false);
                 const {authenticated, user} = response.data;

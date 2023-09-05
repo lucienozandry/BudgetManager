@@ -41,9 +41,7 @@ const LoginForm = React.memo(() => {
             password: password
         };
 
-
-
-        const response = await backend('/user/auth/login', payload, "post");
+        const response = await backend('/auth/login', payload, "post");
 
         if (response.errors) {
             setErrors(response.errors);
@@ -51,10 +49,10 @@ const LoginForm = React.memo(() => {
             setErrors(null);
             if (response.data.token) {
                 Session.set(response.data.token.value);
-                alterAuth(true, response.data.auth);
+                alterAuth(true, response.data.user);
             } else {
                 console.log(response.data)
-            }
+            }   
         }
         setLoading(false);
     }
@@ -65,12 +63,12 @@ const LoginForm = React.memo(() => {
                 <div className="card">
                     <form method="post" onSubmit={handleSubmit} style={{ textAlign: "center" }}>
                         <div className="card-header">
-                            <h4>Vos informations de connexions</h4>
+                            <h4>Your authentication informations</h4>
                         </div>
                         <div className="card-body">
                             <div className="mb-3">
                                 <input type="email" className={`form-control ${errors && errors.email && "is-invalid"} `}
-                                    name="email" id="email" placeholder="john@doe.com" ref={inputEmail} style={{ textAlign: "center" }} />
+                                    name="email" id="email" placeholder="user@example.com" ref={inputEmail} style={{ textAlign: "center" }} />
                                 {
                                     errors &&
                                     errors.email &&

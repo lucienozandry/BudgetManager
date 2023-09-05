@@ -82,15 +82,15 @@ const SignupForm = React.memo(function () {
         const email = emailInput.current.value;
 
         if (passwordIsValid) {
-            const response = await backend('/user/auth/signup', { name: name, email: email, password: password }, "post")
+            const response = await backend('/auth/signup', { name: name, email: email, password: password }, "post")
             if (response.errors) {
                 setErrors(response.errors);
             } else {
                 setErrors(null)
             }
-            if (response.data?.authUser) {
+            if (response.data?.user) {
                 Session.set(response.data.token.value);
-                alterAuth(true, response.data.authUser)
+                alterAuth(true, response.data.user)
             }
         }
 

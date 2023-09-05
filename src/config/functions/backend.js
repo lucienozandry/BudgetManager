@@ -14,17 +14,28 @@ export default async function backend(route = "/", json = {}, method = "post") {
     }
 
     const token = {
-        value : localStorage.getItem("token"),
-        userAgent : navigator.userAgent
+        value: localStorage.getItem("token"),
+        userAgent: navigator.userAgent
     }
 
     let payload = {
         route: route,
-        token : token
+        token: token
     }
 
-    payload = route.includes('login') ? {...payload, loginData : json} : {...payload, signupData : json};
-    
+    switch (route) {
+        case '/auth/login':
+            payload = { ...payload, loginData: json }
+            break;
+
+        case '/auth/signup':
+            payload = { ...payload, signupData: json }
+            break;
+            
+        default:
+            break;
+    }
+
     await fetch(backendUrl, {
         method: method,
         headers: {
